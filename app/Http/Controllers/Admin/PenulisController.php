@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Author;
+use Validator;
 
 class PenulisController extends Controller
 {
@@ -38,29 +39,38 @@ class PenulisController extends Controller
     public function store(Request $request)
     {
         //Request Ajax
-        return $request;
-        // $request->validate([
-        //     'nama' => 'required'
-        // ]);
+         $validation = Validator::make($request->all(), [
+             'nama' => 'required'
+        ]);
+    
+         $errordata = [];
 
-        // if ($errors->any() ) {
+        if ($validation->fails() ) {
 
-        //     return json_encode([
-        //         "error" => $error ,
-        //         "status" => "Data Gagal Ditambahkan"
-        //     ]);
+            foreach($validation->messages()->getMessages() as $value => $statusError)
+            {
 
-        // } else {
+                $errordata = [
+                "error" => $statusError ,
+                "status" => "Data Gagal Ditambahkan"
+                ];
 
-        //     Author::create($request->all());
-        //     return json_encode([
+            }
 
-        //         "error" => false ,
-        //         "status" => "Data Berhasil Ditambahkan"
+        } else {
 
-        //     ]);
+            Author::create($request->all());
+           
+           $errordata = [
 
-        // }
+                "error" => ['false'] ,
+                "status" => "Data Berhasil Ditambahkan"
+
+            ];
+
+        }
+
+        echo json_encode($errordata);
 
       
     }

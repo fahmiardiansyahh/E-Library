@@ -57,19 +57,18 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	      		<form action="{{ route('admin.penulis') }}" method="POST" id="formTambahPenulis">
+	      	<form action="{{ route('admin.penulis') }}" method="POST" id="formTambahPenulis">
 				        	@csrf
-				 </form>
 				<div class="form-group">
 				    <label for="nama">Nama</label>
 				       	<input type="text" name="nama" id="nama" class="form-control" placeholder="Masukan Nama Penulis..." autocomplete="off">
 				</div>
 	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-	        <button type="submit" class="btn btn-primary" name="simpan" id="tombolSimpanPenulis">Simpan</button>
-	      </div>
-	     </form>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+		        <button type="submit" class="btn btn-primary" name="simpan" id="tombolSimpanPenulis">Simpan</button>
+		      </div>
+	     	</form>
 	    </div>
 	  </div>
 	</div>
@@ -115,7 +114,7 @@
     			method : 'POST',
     			dataType : 'JSON',
     			success : function (data) {
-    				console.log(data);
+    				console.log(data.error[0]);
     			}
     		});
     	});
