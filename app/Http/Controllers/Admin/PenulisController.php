@@ -27,7 +27,7 @@ class PenulisController extends Controller
      */
     public function create()
     {
-        //
+        //use if not using AJAX
     }
 
     /**
@@ -40,7 +40,7 @@ class PenulisController extends Controller
     {
         //Request Ajax
          $validation = Validator::make($request->all(), [
-             'nama' => 'required'
+             'nama' => 'required|unique:authors,nama'
         ]);
     
          $errordata = [];
@@ -52,21 +52,21 @@ class PenulisController extends Controller
 
                 $errordata = [
                 "error" => $statusError ,
-                "status" => "Data Gagal Ditambahkan"
+                "errorStatus" => 0
                 ];
 
             }
 
         } else {
-
-            Author::create($request->all());
            
            $errordata = [
 
-                "error" => ['false'] ,
-                "status" => "Data Berhasil Ditambahkan"
+                "error" => 'Data Berhasil Ditambahkan' ,
+                "errorStatus" => 1
 
             ];
+
+            Author::create($request->all());
 
         }
 

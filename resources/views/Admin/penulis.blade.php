@@ -62,6 +62,7 @@
 				<div class="form-group">
 				    <label for="nama">Nama</label>
 				       	<input type="text" name="nama" id="nama" class="form-control" placeholder="Masukan Nama Penulis..." autocomplete="off">
+				    <div class="invalid-feedback"></div>
 				</div>
 	      </div>
 		      <div class="modal-footer">
@@ -91,6 +92,9 @@
 			]
 		});
 		$('#tambahPenulisModal').on('click' , function(){
+			$('.invalid-feedback').fadeOut();
+			$('#nama').removeClass('is-invalid');
+			$('#nama').val('');
 			$('#modalTambahPenulis').modal({
 				show : true,
 				keyboard : false,
@@ -114,7 +118,31 @@
     			method : 'POST',
     			dataType : 'JSON',
     			success : function (data) {
-    				console.log(data.error[0]);
+    				// console.log(data);
+    				// salah
+    				if (data.errorStatus == 0) {
+    					$('#nama').addClass('is-invalid');
+    					$('.invalid-feedback').html(''+ data.error[0]);
+    					$('.invalid-feedback').fadeIn('slow');
+    					$('#nama').focus();
+    				} else {
+    					// Sukses
+    					// swall
+    					document.location.href = '{{ route('admin.penulis') }}'
+
+    					const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 5000
+						});
+
+						Toast.fire({
+							type: 'success',
+							title: data.error
+						});
+
+    				}
     			}
     		});
     	});
