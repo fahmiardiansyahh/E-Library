@@ -11,5 +11,10 @@ Route::get('/data/penulis' , 'DataAuthorsController@authors')->name('data.penuli
 
 Route::get('/buku' , 'BukuController@index')->name('buku');
 
+Route::delete('/data/penulis/id/{id}', 'PenulisController@destroy')->name('HapusPenulis');
 
 Route::post('/penulis' , 'PenulisController@store')->name('tambahPenulis');
+
+Route::post('/data/penulis' , 'PenulisController@show')->name('TampilPenulis');
+
+Route::put('/data/penulis/edit', 'PenulisController@update')->name('EditPenulis');

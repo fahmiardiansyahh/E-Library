@@ -20,24 +20,31 @@
  					<hr>
  					<div class="table-responsive">
  						<table id="tableDataPenulis" class="table table-striped table-bordered" style="width: 100%">
- 							<thead>
+ 							<thead class="text-center">
  								<tr>
  									<th scope="col">#</th>
  									<th scope="col">Nama</th>
+ 									<th scope="col">Aksi</th>
  								</tr>
  							</thead>
- 							<!-- <tbody>
+ 							<tbody class="text-center">
  								<tr>
- 									<th scope="row">
- 									</th>	
+ 			
  								</tr>
- 							</tbody> -->
+ 							</tbody>
  						</table>
  					</div>
  				</div>
  			</div>
  		</div>
  	</div>
+
+
+<form action="" method="post" id="hapusForm">
+	@method('delete')
+	@csrf
+	<button type="submit" class="btn btn-danger" style="display: none;">Submit</button>
+</form>
 
  	<!-- Modal tambah Data Penulis -->
 	<div class="modal fade" id="modalTambahPenulis" tabindex="-1" role="dialog" 	aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -57,7 +64,7 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	      	<form action="{{ route('admin.penulis') }}" method="POST" id="formTambahPenulis">
+	      	<form action="{{ route('admin.penulis') }}" method="POST" id="formTambahPenulis" class="formPenulisTambah">
 				        	@csrf
 				<div class="form-group">
 				    <label for="nama">Nama</label>
@@ -67,7 +74,7 @@
 	      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-		        <button type="submit" class="btn btn-primary" name="simpan" id="tombolSimpanPenulis">Simpan</button>
+		        <button type="submit" class="btn btn-primary simpanUbahData" name="simpan">Simpan</button>
 		      </div>
 	     	</form>
 	    </div>
@@ -87,66 +94,249 @@
 			serverside : true,
 			ajax :'{{ route('admin.data.penulis') }}',
 			columns : [
-				{data : 'id'},
-				{data : 'nama'}
+				{data : 'DT_RowIndex'},
+				{data : 'nama'},
+				{data : 'aksi'}
 			]
 		});
+
+		$('button[data-dismiss=modal]').on('click' , function() {
+			$('input[value=put]').remove();
+			$('input[name=id]').remove();
+		})
+
+
 		$('#tambahPenulisModal').on('click' , function(){
-			$('.invalid-feedback').fadeOut();
-			$('#nama').removeClass('is-invalid');
-			$('#nama').val('');
-			$('#modalTambahPenulis').modal({
-				show : true,
-				keyboard : false,
-				backdrop : 'static'
-			});
+
+					$('.modal-title').html('Tambah Data Penulis');
+		 			$('.invalid-feedback').fadeOut();
+					$('#nama').removeClass('is-invalid');
+					$('#nama').val('');
+		 			$('.simpanUbahData').html('Tambah');
+		 			$('.modal').removeAttr('id');
+					$('.modal').attr('id' , 'modalTambahPenulis');
+		 			$('.simpanUbahData').removeAttr('id');
+					$('.simpanUbahData').attr('id' , 'tombolTambahPenulis');
+		 			$('#modalTambahPenulis').modal({
+							show : true,
+							keyboard : false,
+							backdrop : 'static'
+					});
+
+					$('#modalTambahPenulis').on("shown.bs.modal", function() {
+        				$('#nama').focus();
+    				});
+
+			    	// ajax simpan
+			    $('.modal-footer').on('click', '#tombolTambahPenulis' , function(e) {
+			    		// ajax
+			    		e.preventDefault();
+			    		$.ajax({
+			    			url : '{{ route('admin.tambahPenulis') }}',
+			    			data : {
+			    				'_token' : $('input[name=_token]').val(),
+			    				'nama' : $('#nama').val()
+			    			} ,
+			    			method : 'POST',
+			    			dataType : 'JSON',
+			    			success : function (data) {
+			    				// console.log(data);
+			    				// salah
+			    				if (data.errorStatus == 0) {
+			    					$('#nama').addClass('is-invalid');
+			    					$('.invalid-feedback').html(''+ data.error[0]);
+			    					$('.invalid-feedback').fadeIn('slow');
+			    					$('#nama').focus();
+			    				} else {
+
+			    					$('#modalTambahPenulis').modal('hide')
+
+			    					const Toast = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+										timer: 5000
+									});
+
+									Toast.fire({
+										type: 'success',
+										title: data.error
+									});
+
+									  // data table refresh
+								    	$('.dataTable').DataTable().ajax.reload();
+									// refresh end
+
+			    				}
+			    			}
+			    		});
+			    	});
+
 		});
-		$('#modalTambahPenulis').on("shown.bs.modal", function() {
-        	$('#nama').focus();
-    	});
 
-    	// ajax simpan
-    	$('#formTambahPenulis').on('submit' , function(e) {
-    		// ajax
-    		e.preventDefault();
-    		$.ajax({
-    			url : '{{ route('admin.tambahPenulis') }}',
-    			data : {
-    				'_token' : $('input[name=_token]').val(),
-    				'nama' : $('#nama').val()
-    			} ,
-    			method : 'POST',
-    			dataType : 'JSON',
-    			success : function (data) {
-    				// console.log(data);
-    				// salah
-    				if (data.errorStatus == 0) {
-    					$('#nama').addClass('is-invalid');
-    					$('.invalid-feedback').html(''+ data.error[0]);
-    					$('.invalid-feedback').fadeIn('slow');
-    					$('#nama').focus();
-    				} else {
-    					// Sukses
-    					// swall
-    					document.location.href = '{{ route('admin.penulis') }}'
+		
 
-    					const Toast = Swal.mixin({
-							toast: true,
-							position: 'top-end',
-							showConfirmButton: false,
-							timer: 5000
-						});
+    	// edit data penulis
+    	$('#tableDataPenulis').on('click' , '.buttonEditPenulis' , function(e) {
+	 		e.preventDefault();
 
-						Toast.fire({
-							type: 'success',
-							title: data.error
-						});
+	 			$('.modal-title').html('Ubah Data Penulis');
+	 			$('.invalid-feedback').fadeOut();
+				$('#nama').removeClass('is-invalid');
+	 			$('.simpanUbahData').html('Ubah');
+	 			$('.modal').removeAttr('id');
+				$('.modal').attr('id' , 'modalUbahPenulis');
+	 			$('.simpanUbahData').removeAttr('id');
+				$('.simpanUbahData').attr('id' , 'tombolUbahPenulis');
+	 			$('#modalUbahPenulis').modal({
+						show : true,
+						keyboard : false,
+						backdrop : 'static'
+				});
 
-    				}
-    			}
-    		});
-    	});
+	 			// Masukan element Id 
+	 			$('#nama').before(`
+				<input type="hidden" name="id" value=`+ $(this).data('id')+`>
+			 	`)
+				// Masukan Method Put
+			 	$('input[name=_token]').after(`
+				<input type="hidden" name="_method" value="put">
+			 	`)
+			 	
 
+	 			// Id
+	 			const id = $(this).data('id');
+	 			// console.log(id);
+
+				$.ajax({
+					url : '{{ route('admin.TampilPenulis') }}' ,
+					dataType : 'JSON',
+					method : 'POST' ,
+					data : { 
+					'_token' : $('input[name=_token]').val(),
+					'id' : id } ,
+					success : function(value) {
+						// console.log(value)
+						value.forEach(function(data) {
+							$('input[name=nama]').val(data.nama);
+							$('input[name=nama]').focus();
+						} ) 
+						
+					}
+
+				});
+	
+	 	});
+
+
+	 	// Hapus data penulis
+    	$('#tableDataPenulis').on('click' , '.buttonHapusPenulis' , function(e) {
+	 		e.preventDefault();
+	 		// console.log('ok')
+	 		Swal.fire({
+			  title: 'Yakin ?',
+			  text: "Data " + $(this).data('nama') + " Akan Dihapus!",
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: 'Ya, Hapus !'
+			}).then((result) => {
+			  if (result.value) {
+			    // Hapus
+			    // console.log($(this).attr('href'));
+			    const href = $(this).attr('href');
+			    const idPenulis = $(this).data('id');
+			    // console.log(idPenulis);
+			    $.ajax({
+			    	url : href , 
+			    	method : 'DELETE',
+			    	dataType : 'JSON',
+			    	data : {'id' : idPenulis ,
+			    	'_token' : $('input[name=_token]').val()
+			    	} ,
+			    	success : function(data) {
+			    		// console.log(data);
+			    		const Alert = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+											timer: 5000
+										});
+
+										Alert.fire({
+											type: 'success',
+											title: data.error
+										});
+
+			    	}
+			    })
+
+				    // data table refresh
+				    	$('.dataTable').DataTable().ajax.reload();
+					// refresh end
+
+			   
+			  }
+			})
+
+	 	});
+
+
+	 		// Ubah Ajax
+		    $('.modal-footer').on('click', '#tombolUbahPenulis' , function(e) {
+			 		e.preventDefault();
+			 		// console.log($('input[name=id]').val())
+
+			 		// Ajax Ubah
+			 		$.ajax({
+			 			url : '{{ route('admin.EditPenulis') }}' ,
+ 						method : 'PUT' ,
+ 						dataType :'JSON' ,
+ 						data : {
+ 							'_token' : $('input[name=_token]').val(),
+ 							'id' : $('input[name=id]').val(),
+ 							'nama' : $('#nama').val()
+ 						},
+ 						success : function(data) {
+ 							// console.log(data);
+ 							// salah
+			    				if (data.errorStatus == 0) {
+			    					$('#nama').addClass('is-invalid');
+			    					$('.invalid-feedback').html(''+ data.error[0]);
+			    					$('.invalid-feedback').fadeIn('slow');
+			    					$('#nama').focus();
+			    				} else {
+			    					// Sukses
+			    					// swall
+			    					
+
+			    					$('#modalUbahPenulis').modal('hide')
+
+			    					const Toast = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+										timer: 5000
+									});
+
+									Toast.fire({
+										type: 'success',
+										title: data.error
+									});
+
+									// data table refresh
+			    					 $('.dataTable').DataTable().ajax.reload();
+									// refresh end
+
+			    				}
+ 						}
+			 		});
+
+			} ) ;
+			 		
+
+	 
 	});
 </script>
 

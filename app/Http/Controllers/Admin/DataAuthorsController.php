@@ -13,7 +13,15 @@ class DataAuthorsController extends Controller
     //Data Author
     public function authors() {
 
-    	 return datatables()->of(Author::query())->toJson();
+
+    	 return datatables()->of(Author::orderBy('nama' , 'DESC'))
+    	 ->addColumn('aksi', function(Author $authors) {
+    	 	return view('admin.EditData' , [
+    	 		'authors' => $authors
+    	 	]);
+    	 })
+    	 ->addIndexColumn()
+    	 ->toJson();
 
     }
 }

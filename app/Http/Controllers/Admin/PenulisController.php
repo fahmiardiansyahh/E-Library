@@ -81,9 +81,11 @@ class PenulisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        //show
+        $user = Author::where('id' , $request->id)->get();
+        return response()->json($user);
     }
 
     /**
@@ -94,7 +96,7 @@ class PenulisController extends Controller
      */
     public function edit($id)
     {
-        //
+        //use if not using AJAX
     }
 
     /**
@@ -104,9 +106,48 @@ class PenulisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+
+        //Request Ajax
+
+        $validation = Validator::make($request->all(), [
+             'nama' => 'required|unique:authors,nama'
+        ],[
+            'nama.unique' => 'Try with Another Name to Changed!'
+        ]);
+    
+         $errordata = [];
+
+        if ($validation->fails() ) {
+
+            foreach($validation->messages()->getMessages() as $value => $statusError)
+            {
+
+                $errordata = [
+                "error" => $statusError ,
+                "errorStatus" => 0
+                ];
+
+            }
+
+        } else {
+           
+           $errordata = [
+
+                "error" => 'Data Berhasil DiUbah' ,
+                "errorStatus" => 1
+
+            ];
+
+             Author::where('id', $request->id)
+                ->update([
+                    'nama' => $request->nama
+                ]);
+
+        }
+
+        return response()->json($errordata);
     }
 
     /**
@@ -117,6 +158,15 @@ class PenulisController extends Controller
      */
     public function destroy($id)
     {
-        //
+           $errordata = [
+
+                "error" => 'Data Berhasil DiHapus' ,
+                "errorStatus" => 1
+
+            ];
+             //delete
+        Author::where('id', $id)->delete();
+
+        return response()->json($errordata);
     }
 }
