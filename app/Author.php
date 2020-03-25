@@ -9,4 +9,8 @@ class Author extends Model
     //
     protected $guarded = [];
     public $timestamps = false;
+
+    public function book() {
+    	return $this->hasMany('App\Book');
+    }
 }

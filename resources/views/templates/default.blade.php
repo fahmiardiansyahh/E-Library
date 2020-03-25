@@ -20,10 +20,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    @yield('title')
+    @yield('TitlePage')
   </title>
   <!-- Favicon -->
-  <link href="{{ asset('assets/img/brand/favicon.png') }}" rel="icon" type="image/png">
+  <link href="{{ asset('assets/img/brand/Book.png') }}" rel="icon" type="image/png">
+  <!-- Bootstrap -->
+  <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <!-- Icons -->

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class BookTableSeeder extends Seeder
+class AuthorTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,7 @@ class BookTableSeeder extends Seeder
      */
     public function run()
     {
-        //
-        factory(App\Book::class,50)->create();
+        //factory
+        factory(App\Author::class,10)->create();
     }
 }

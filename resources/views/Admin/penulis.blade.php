@@ -8,6 +8,23 @@
  		<div class="col">
  			<div class="card shadow">
  				<div class="card-header border-0">
+					  <?php $urlCurrent = Route::currentRouteName(); 
+				        $urls = explode('.', $urlCurrent);
+				        $url = end($urls);
+				       ?>
+						@if($url == "penulis") 
+						<div class="row">
+	 						<div class="col-12">
+	 							<nav aria-label="breadcrumb">
+								  <ol class="breadcrumb float-left">
+								    <li class="breadcrumb-item"><a href="{{ url()->route('admin.dashboard') }}">Home</a></li>
+								    <li class="breadcrumb-item active" aria-current="page">{{ ucwords($url) }}</li>
+								  </ol>
+								</nav>
+	 						</div>
+ 						</div>
+ 						@endif
+
  					<div class="row">
 	 					<div class="col-6">
 	 						<h1 class="m-0">Data Penulis</h1>

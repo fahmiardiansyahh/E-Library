@@ -2,21 +2,23 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Author;
-use App\book;
+use App\Book;
 use Faker\Generator as Faker;
+use App\Author;
 
-$factory->define(book::class, function (Faker $faker) {
+$factory->define(Book::class, function (Faker $faker) {
 
-	$randId = rand(1,100);
+
+   	$randId = rand(1,100);
 	$cover = "https://picsum.photos/id/{$randId}/200/300";
  
     return [
         //
         'author_id' => Author::inRandomOrder()->first()->id,
-        'title' => $faker->sentence(5) , 
+        'title' => $faker->sentence(4) , 
         'description' => $faker->sentence(20) , 
         'cover' => $cover ,
         'qty' => rand(10,20),
     ];
+
 });
