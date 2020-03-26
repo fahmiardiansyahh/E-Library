@@ -29,6 +29,7 @@ class DataController extends Controller
 
         $book = Book::orderBy('title' , 'ASC') ;
 
+
     	return datatables()->of($book)
          ->addColumn('NamaAuthor', function(Book $model) {
             return '<b>' .$model->author->nama.  '</b>';
@@ -36,11 +37,11 @@ class DataController extends Controller
           ->addColumn('aksi', function(Book $model) {
             return '
             <a href="" class="btn btn-sm btn-warning EditDataBuku">Edit</a> | &nbsp;
-            <a href="" class="btn btn-sm btn-danger HapusDataBuku">Hapus</a>
+            <a href="'. url()->route('admin.HapusDataBuku' , ['id' => $model->id]) .'" class="btn btn-sm btn-danger HapusDataBuku" data-id="'. $model->id .'" data-name="' . $model->title . '">Hapus</a>
             ';
             })
           ->editColumn('cover' , function (Book $model) {
-            return '<img src="' . $model->cover . '" height="75" width="100" > ';
+            return '<img src="' . $model->getCover() . '" height="75" width="100" > ';
           })
          ->addIndexColumn()
          ->rawColumns(['NamaAuthor','aksi','cover'])

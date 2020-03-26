@@ -21,6 +21,8 @@ Route::post('/penulis/data' , 'PenulisController@show')->name('TampilPenulis');
 // Data Buku
 Route::post('/buku', 'BukuController@store')->name('tambahBuku');
 
+Route::delete('/buku/data/id/{id}' , 'BukuController@destroy')->name('HapusDataBuku');
+
 Route::put('/penulis/data/edit', 'PenulisController@update')->name('EditPenulis');
 
 Route::delete('/penulis/data/id/{id}', 'PenulisController@destroy')->name('HapusPenulis');

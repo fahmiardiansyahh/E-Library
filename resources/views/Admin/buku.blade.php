@@ -74,6 +74,14 @@
 
 <!-- sections menu pages -->
 
+<!-- Hapus -->
+<form action="" method="post" id="hapusFormBuku">
+	@method('delete')
+	@csrf
+	<button type="submit" class="btn btn-danger" style="display: none;">Submit</button>
+</form>
+<!-- Hapus  -->
+
 <!-- Modal -->
 
 		<div class="modal fade" id="modalTambahUbahBuku" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -101,7 +109,7 @@
 									<div class="form-group">
 										<label for="author_id">Nama Author</label>
 									   	<select name="author_id" id="author_id" class="form-control custom-select">
-									   		<option value="" class="defaultAuthor" selected>Pilih Author</option>
+									   		<option value="" class="defaultAuthor">Pilih Author</option>
 											@foreach ($buku as $dataBuku) 
 											
 											<option value="{{ $dataBuku->id }}"> {{ $dataBuku->nama }}</option>	
@@ -193,6 +201,7 @@
 				$(this).next('.custom-file-label').addClass("selected").html(fileName);
 			});
 
+
 			//tambah data buku
 			$('#tambahBukuModal').click(function() {
 
@@ -203,6 +212,8 @@
 					backdrop : 'static',
 				});
 
+
+
 				// Title Modal 
 				$('#titleModalBuku').html('Tambah Data Buku');
 
@@ -211,6 +222,22 @@
 
 				// Tambah attr id tambah buku
 				$('form[name=formTambahUbahBuku]').attr('id', 'TambahBuku');
+
+				// on show bs modal
+				$('#modalTambahUbahBuku').on("shown.bs.modal", function() {
+					// remove selected
+					$('.defaultAuthor').removeAttr('selected');
+					// refresh Modal
+					$('#author_id option[value=""]').attr('selected', 'selected');
+					$('#judul_buku').val('');
+					$('#deskripsi_buku').val('');
+					$('#qty_buku').val('');
+					$('#gambar_buku').val('');
+					$('.custom-file-label').html(`
+						 <label class="custom-file-label" for="gambar_buku">Pilih Gambar...</label>
+					`);
+	        	
+	    		});
 
 				// Ajax tambah data buku
 				$('.modal-body').on('submit' , '#TambahBuku' , function(e) {
@@ -370,6 +397,27 @@
 								$('.MassageGambarBuku').html('');
 
 
+								// Close The Modal
+
+								$('#modalTambahUbahBuku').modal('hide');
+
+								// Swall Fade In
+								const Toast = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+										timer: 5000
+									});
+
+									Toast.fire({
+										type: 'success',
+										title: data.msg
+									});
+
+								// Ajax Reload
+								$('#tableDataBuku').DataTable().ajax.reload();
+
+
 
 
 
@@ -399,8 +447,66 @@
 				});
 
 
-				})
+				});
 				
+
+			});
+
+			// Hapus Data Buku 
+			$('#tableDataBuku').on('click' , '.HapusDataBuku' , function(e) {
+
+				e.preventDefault();
+
+				// Take the id
+				const id =  $(this).data('id');
+				const href = $(this).attr('href');
+
+				Swal.fire({
+				  title: 'Yakin ?',
+				  text: "Data Buku" + $(this).data('name')  +  " Akan Dihapus!",
+				  type: 'warning',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'Ya, Hapus !'
+				}).then((result) => {
+				if (result.value) {
+				  	
+				  	$.ajax({
+
+				  		url : href,
+				  		method : 'DELETE',
+				  		dataType : 'JSON',
+				  		data : {id : id ,
+				  			'_token' : $('input[name=_token]').val() } , 
+				  		success : function(data) {
+				  			// success
+				  			const Alert = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+											timer: 5000
+										});
+
+										Alert.fire({
+											type: 'success',
+											title: data.msg
+										});
+
+				  		}
+
+
+				  	});
+
+				  	// Ajax Reload
+					$('#tableDataBuku').DataTable().ajax.reload();
+
+
+
+				}
+
+				});
+
 
 			})
 

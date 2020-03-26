@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Author;
+use App\Book;
 use Validator;
 
 
@@ -46,7 +47,7 @@ class BukuController extends Controller
             'judul_buku' => 'required|unique:books,title',
             'deskripsi_buku' => 'required|min:20',
             'qty_buku' => 'required|numeric',
-            'gambar_buku' => 'required|image|mimes:jpeg,png|max:500'
+            'gambar_buku' => 'image|mimes:jpeg,png|max:500'
         ],[
             // Massage Customs
             // for max change to -> uploaded
@@ -58,7 +59,7 @@ class BukuController extends Controller
 
         $errordata = [];
 
-        // validation fails
+        // Validation fails
         if ($validation->fails() ) {
 
 
@@ -73,6 +74,71 @@ class BukuController extends Controller
 
 
            
+
+        } else {
+            // Validation Success
+
+            // Check Cover is  null
+            if (empty($request->file('gambar_buku')) ) {
+
+                $cover = null;
+
+                  // Simpan Data Ke database
+                    $buku = Book::create([
+                        'author_id' => $request->author_id,
+                        'title' => $request->judul_buku,
+                        'description' => $request->deskripsi_buku,
+                        'cover' => $cover,
+                        'qty' => $request->qty_buku
+                    ]);
+
+                    // $buku running
+                    if ($buku) {
+
+                        $errordata = [
+                            'error' => 0 ,
+                            'msg' => 'Successfully Data Has Been Saved'
+                        ];
+
+
+                    }
+
+
+            } else {
+
+                // Not Null
+                  // Take Picture Cover
+                    $cover = $request->file('gambar_buku')->store('assets/covers');
+
+                    // Simpan Data Ke database
+                    $buku = Book::create([
+                        'author_id' => $request->author_id,
+                        'title' => $request->judul_buku,
+                        'description' => $request->deskripsi_buku,
+                        'cover' => $cover,
+                        'qty' => $request->qty_buku
+                    ]);
+
+                    // $buku running
+                    if ($buku) {
+
+                        $errordata = [
+                            'error' => 0 ,
+                            'msg' => 'Successfully Data Has Been Saved!'
+                        ];
+
+
+                    }
+
+
+
+
+            }
+
+
+          
+
+
 
         }
 
@@ -126,6 +192,27 @@ class BukuController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //delete
+
+       $buku = Book::where('id', $id)->delete();
+
+
+       if ($buku) {
+
+            $errordata = [
+
+                'msg' => 'Successfully Data Has Been Deleted!'
+
+
+            ];
+
+
+       }
+
+
+        return response()->json($errordata);
+
+
+
     }
 }
