@@ -36,7 +36,7 @@ class DataController extends Controller
             })
           ->addColumn('aksi', function(Book $model) {
             return '
-            <a href="" class="btn btn-sm btn-warning EditDataBuku">Edit</a> | &nbsp;
+            <a href="" class="btn btn-sm btn-warning EditDataBuku" data-id="'. $model->id .'">Edit</a> | &nbsp;
             <a href="'. url()->route('admin.HapusDataBuku' , ['id' => $model->id]) .'" class="btn btn-sm btn-danger HapusDataBuku" data-id="'. $model->id .'" data-name="' . $model->title . '">Hapus</a>
             ';
             })

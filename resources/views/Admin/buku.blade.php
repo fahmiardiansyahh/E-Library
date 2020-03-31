@@ -195,12 +195,6 @@
 				]
 			});
 
-			// Setting name buat type input file
-			$('.custom-file-input').on('change' , function(){
-				let fileName = $(this).val().split('\\').pop();
-				$(this).next('.custom-file-label').addClass("selected").html(fileName);
-			});
-
 
 			//tambah data buku
 			$('#tambahBukuModal').click(function() {
@@ -223,19 +217,34 @@
 				// Tambah attr id tambah buku
 				$('form[name=formTambahUbahBuku]').attr('id', 'TambahBuku');
 
-				// on show bs modal
+				// Delete method put 
+				$('input[value=put]').remove();
+
+				// Deleted id buku
+				$('input[name=id_buku]').remove();
+
+				// refresh Modal Selected Option
+				$('#author_id option[class=defaultAuthor]').prop('selected', 'selected');
+
+
+				// on show bs modal default
 				$('#modalTambahUbahBuku').on("shown.bs.modal", function() {
-					// remove selected
-					$('.defaultAuthor').removeAttr('selected');
-					// refresh Modal
-					$('#author_id option[value=""]').attr('selected', 'selected');
-					$('#judul_buku').val('');
-					$('#deskripsi_buku').val('');
-					$('#qty_buku').val('');
-					$('#gambar_buku').val('');
-					$('.custom-file-label').html(`
-						 <label class="custom-file-label" for="gambar_buku">Pilih Gambar...</label>
-					`);
+
+						$('#judul_buku').val('');
+						$('#deskripsi_buku').val('');
+						$('#qty_buku').val('');
+						$('#gambar_buku').val('');
+						$('.custom-file').html(`
+								<input type="file" name="gambar_buku" class="custom-file-input" id="gambar_buku">
+										<label class="custom-file-label" for="gambar_buku">Pilih Gambar...</label>
+											     <div class="invalid-feedback MassageGambarBuku"> </div>
+						`);
+
+
+						// Setting name buat type input file
+						$('form[name=formTambahUbahBuku] .custom-file-input').on('change' , function(event){
+						   $(this).next('.custom-file-label').html(event.target.files[0].name);
+						});
 	        	
 	    		});
 
@@ -451,6 +460,329 @@
 				
 
 			});
+
+			// Edit Data Buku
+			$('#tableDataBuku').on('click' , '.EditDataBuku' , function(e) {
+
+				e.preventDefault();
+
+				// show Modal
+				$('#modalTambahUbahBuku').modal({
+					show : true,
+					keyboard : false,
+					backdrop : 'static',
+				});
+
+
+				// Change ELement modal
+
+					// Title Modal 
+					$('#titleModalBuku').html('Ubah Data Buku');
+
+					// Ubah attr id Ubah Buku
+					$('form[name=formTambahUbahBuku]').attr('id', 'UbahBuku');
+
+					// Button Modal
+					$('.simpanUbahDataBuku').html('Ubah');
+
+					// Change Method after token
+					let put = $('input[value=put]');
+
+					if(put.val() === undefined) {
+
+						$('input[name=_token]').after(`
+						
+						<input type="hidden" name="_method" value="put">
+
+						`);
+
+						$('input[value=put]').after(`
+						<input type="hidden" name="id_buku" value=`+ $(this).data('id')+`>
+
+			 			`)
+
+					}
+
+
+				// Fill The Element Input Modal With data AJAX
+
+				// Id get data
+				const idBuku = $(this).data('id');
+
+				// Ajax Data
+
+				$.ajax({
+
+					url : '{{ route('admin.TampilBuku') }}',
+					method : 'POST',
+					dataType : 'JSON',
+					data : { 'id' : idBuku ,
+						'_token' : $('input[name=_token]').val()
+					}, 
+					success : function(data) {
+
+						// ArrayEach to Object
+						data.forEach(function(result) {
+							
+							// Fill To Element
+
+							// remove selected
+							$('#author_id option[class=defaultAuthor]').removeAttr('selected');
+
+							// Name Author
+							$('#author_id option[value='+ result.author_id +']').prop('selected' , 'selected');
+
+							// Judul Buku
+							$('#judul_buku').val(result.title);
+							$('#deskripsi_buku').val(result.description);
+							$('#qty_buku').val(result.qty);
+
+							// Gambar Seettings
+							let cover = null;
+
+							if (result.cover !== null) {
+
+
+								if (result.cover.substring(0,5) == "https") {
+
+								cover = result.cover;
+
+								} else {
+
+									cover = '{{ asset('') }}' + result.cover ;
+
+								}
+
+							} else {
+
+								cover = 'https://via.placeholder.com/75x100.png?text=No Cover';
+
+							}
+
+							
+							$('.MassageGambarBuku').after(`
+
+							<img src="`+ cover +`" alt="gambar" name="tampil_gambar" height="75" width="100" class="mt-3"/>
+										<small class="text-danger d-block mt-1  font-italic"> *)This Image Exstention PNG/JPG File.</small>
+
+							`);
+
+
+						})
+						
+
+					}
+
+
+				});
+
+
+			});
+
+
+			// Form Submited ubah data 
+
+			$('.modal-body').on('submit' , '#UbahBuku' , function(e) {
+
+				e.preventDefault();
+
+				// Ajax Update Data 
+
+				$.ajax({
+
+					url : '{{ route('admin.EditBuku') }}' ,
+					method : 'POST' ,
+					contentType : false ,
+					cache : false ,
+					processData : false ,
+					data : new FormData(this) ,
+					dataType : 'JSON',
+					success :function(data) {
+
+						// Cek Validasi 
+
+						// Validasi Error
+						if(data.error == 1) {
+
+							// Cek 1 per 1 field
+							if(data.author_id !== "") {
+								// Ada Error
+
+								// Tambahkan is-invalid class
+								$('#author_id').addClass('is-invalid');
+
+								// Tambahkan Pesan
+								$('.MassageAuthor').html(data.author_id);
+
+
+							} else {
+								// Error Not Found for author
+
+								//  Remove Class
+								$('#author_id').removeClass('is-invalid');
+
+								// Hapus Pesan
+								$('.MassageAuthor').html(data.author_id);
+
+							}
+
+							// Judul Buku
+
+							if(data.judul_buku !== "") {
+								// Ada Error
+
+								// Tambahkan is-invalid class
+								$('#judul_buku').addClass('is-invalid');
+
+								// Tambahkan Pesan
+								$('.MassageJudulBuku').html(data.judul_buku);
+
+
+							} else {
+								// Error Not Found for judul Buku
+
+								//  Remove Class
+								$('#judul_buku').removeClass('is-invalid');
+
+								// Hapus Pesan
+								$('.MassageAuthor').html(data.judul_buku);
+
+							}
+
+							// Deskripsi Buku
+
+							if(data.deskripsi_buku !== "") {
+								// Ada Error
+
+								// Tambahkan is-invalid class
+								$('#deskripsi_buku').addClass('is-invalid');
+
+								// Tambahkan Pesan
+								$('.MassageDeskripsi').html(data.deskripsi_buku);
+
+
+							} else {
+								// Error Not Found for deskripsi Buku
+
+								//  Remove Class
+								$('#deskripsi_buku').removeClass('is-invalid');
+
+								// Hapus Pesan
+								$('.MassageDeskripsi').html(data.deskripsi_buku);
+
+							}
+
+							// Qty
+
+							if(data.qty_buku !== "") {
+								// Ada Error
+
+								// Tambahkan is-invalid class
+								$('#qty_buku').addClass('is-invalid');
+
+								// Tambahkan Pesan
+								$('.MassageQty').html(data.qty_buku);
+
+
+							} else {
+								// Error Not Found for QTY
+								//  Remove Class
+								$('#qty_buku').removeClass('is-invalid');
+
+								// Hapus Pesan
+								$('.MassageQty').html(data.qty_buku);
+
+							}
+
+							// Gambar
+
+							if(data.gambar_buku !== "") {
+								// Ada Error
+
+								// Tambahkan is-invalid class
+								$('#gambar_buku').addClass('is-invalid');
+
+								// Tambahkan Pesan
+								$('.MassageGambarBuku').html(data.gambar_buku);
+
+
+							} else {
+								// Error Not Found for Gambar Buku
+
+								//  Remove Class
+								$('#gambar_buku').removeClass('is-invalid');
+
+								// Hapus Pesan
+								$('.MassageGambarBuku').html(data.gambar_buku);
+
+							}
+
+							
+
+
+						} else {
+								
+							// Tidak Ada Error Dari Semua 
+
+								// kondisi default
+								$('#author_id').removeClass('is-invalid');
+								$('.MassageAuthor').html('');
+
+								$('#judul_buku').removeClass('is-invalid');
+								$('.MassageAuthor').html('');
+
+								$('#deskripsi_buku').removeClass('is-invalid');
+								$('.MassageDeskripsi').html('');
+
+								$('#qty_buku').removeClass('is-invalid');
+								$('.MassageQty').html('');
+
+								$('#gambar_buku').removeClass('is-invalid');
+								$('.MassageGambarBuku').html('');
+
+
+								// Close The Modal
+
+								$('#modalTambahUbahBuku').modal('hide');
+
+								// Swall Fade In
+								const Toast = Swal.mixin({
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+										timer: 5000
+									});
+
+									Toast.fire({
+										type: 'success',
+										title: data.msg
+									});
+
+								// Ajax Reload
+								$('#tableDataBuku').DataTable().ajax.reload();
+
+
+
+
+
+
+
+
+
+						}
+
+
+
+					}
+
+
+				});
+
+
+			});
+
+
+
 
 			// Hapus Data Buku 
 			$('#tableDataBuku').on('click' , '.HapusDataBuku' , function(e) {

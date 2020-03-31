@@ -32,7 +32,7 @@ class Book extends Model
 
   		}
 
-  		// default 
+  		// default null
 
   		return 'https://via.placeholder.com/75x100.png?text=No Cover';
 
