@@ -3,7 +3,7 @@
 
 // Route Admin
 
-// Route Penulis
+// Route Data
 
 Route::get('/' , 'HomeController@index')->name('dashboard');
 
@@ -11,7 +11,7 @@ Route::get('/data/penulis' , 'DataController@authors')->name('data.penulis');
 
 Route::get('/data/buku' , 'DataController@books')->name('data.buku');
 
-Route::get('/buku' , 'BukuController@index')->name('buku');
+// Route Penulis
 
 Route::get('/penulis' , 'PenulisController@index')->name('penulis');
 
@@ -27,6 +27,8 @@ Route::delete('/penulis/data/id/{id}', 'PenulisController@destroy')->name('Hapus
 
 
 // Data Buku
+Route::get('/buku' , 'BukuController@index')->name('buku');
+
 Route::post('/buku', 'BukuController@store')->name('tambahBuku');
 
 Route::post('/buku/data' , 'BukuController@show')->name('TampilBuku');

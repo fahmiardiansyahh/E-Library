@@ -101,9 +101,26 @@
 
 @endsection
 
+@push('styles')
+
+<!-- Data table -->
+  <link href="{{ asset('assets/css/jquery.dataTables.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+  <!-- swall -->
+  <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}">
+
+@endpush
+
 
 
 @push('scripts')
+
+  <!-- Data Tables JS -->
+  <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
+  <!-- Swal -->
+  <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
 
 <script>
 	$(function() {

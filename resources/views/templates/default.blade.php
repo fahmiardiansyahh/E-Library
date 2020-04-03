@@ -33,11 +33,10 @@
   <link href="{{ asset('assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
   <!-- CSS Files -->
   <link href="{{ asset('assets/css/argon-dashboard.css?v=1.1.2') }}" rel="stylesheet" />
-  <!-- Data table -->
-  <link href="{{ asset('assets/css/jquery.dataTables.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
-  <!-- swall -->
-  <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}">
+  <!-- Stack Of Data Tables and Swal -->
+  @stack('styles')
+
+
 
 </head>
 

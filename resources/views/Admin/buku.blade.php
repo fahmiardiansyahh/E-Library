@@ -175,7 +175,25 @@
 <!-- Akhir Modal -->
 @endsection
 
+
+@push('styles')
+
+<!-- Data table -->
+  <link href="{{ asset('assets/css/jquery.dataTables.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+  <!-- swall -->
+  <link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}">
+
+@endpush
+
+
 @push('scripts')
+	  <!-- Data Tables JS -->
+  <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
+  <!-- Swal -->
+  <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
 <script>
 		$(function() {
 
@@ -194,6 +212,28 @@
 					{data : 'aksi'}
 				]
 			});
+
+
+			// on show bs modal default
+				$('#modalTambahUbahBuku').on("shown.bs.modal", function() {
+
+						$('#judul_buku').val('');
+						$('#deskripsi_buku').val('');
+						$('#qty_buku').val('');
+						$('#gambar_buku').val('');
+						$('.custom-file').html(`
+								<input type="file" name="gambar_buku" class="custom-file-input" id="gambar_buku">
+										<label class="custom-file-label" for="gambar_buku">Pilih Gambar...</label>
+											     <div class="invalid-feedback MassageGambarBuku"> </div>
+						`);
+
+
+						// Setting name buat type input file
+						$('form[name=formTambahUbahBuku] .custom-file-input').on('change' , function(event){
+						   $(this).next('.custom-file-label').html(event.target.files[0].name);
+						});
+	        	
+	    		});
 
 
 			//tambah data buku
@@ -225,28 +265,6 @@
 
 				// refresh Modal Selected Option
 				$('#author_id option[class=defaultAuthor]').prop('selected', 'selected');
-
-
-				// on show bs modal default
-				$('#modalTambahUbahBuku').on("shown.bs.modal", function() {
-
-						$('#judul_buku').val('');
-						$('#deskripsi_buku').val('');
-						$('#qty_buku').val('');
-						$('#gambar_buku').val('');
-						$('.custom-file').html(`
-								<input type="file" name="gambar_buku" class="custom-file-input" id="gambar_buku">
-										<label class="custom-file-label" for="gambar_buku">Pilih Gambar...</label>
-											     <div class="invalid-feedback MassageGambarBuku"> </div>
-						`);
-
-
-						// Setting name buat type input file
-						$('form[name=formTambahUbahBuku] .custom-file-input').on('change' , function(event){
-						   $(this).next('.custom-file-label').html(event.target.files[0].name);
-						});
-	        	
-	    		});
 
 				// Ajax tambah data buku
 				$('.modal-body').on('submit' , '#TambahBuku' , function(e) {
