@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('root');
+Route::get('/', 'frontend\HomeController@bukuLimit')->name('root');
 
 
 Auth::routes(['verify' => true]);
