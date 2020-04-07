@@ -13,6 +13,8 @@
 
 Route::get('/', 'frontend\HomeController@bukuLimit')->name('root');
 
+Route::get('/book' , 'frontend\BookController@index')->name('books');
+
 
 Auth::routes(['verify' => true]);
 

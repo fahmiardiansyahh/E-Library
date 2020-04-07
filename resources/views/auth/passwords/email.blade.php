@@ -1,4 +1,4 @@
-@extends('frontend.login')
+@extends('frontend.partials.Login.login')
 
 @section('title' , 'Reset Password')
 

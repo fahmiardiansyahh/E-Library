@@ -13,7 +13,7 @@ class HomeController extends Controller
 
 		$book = Book::limit(5)->get();
 
-		return view ('frontend.partials.HomePageDefault' , compact('book'));
+		return view ('frontend.HomePageDefault' , compact('book'));
 
 
 	}

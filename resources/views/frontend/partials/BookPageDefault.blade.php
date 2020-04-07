@@ -22,40 +22,28 @@
 
   <body>
     <!--================ Start Header Menu Area =================-->
-      
-      @include('frontend.Header')
-
+    @include('frontend.partials.HomePage.Header')
     <!--================ End Header Menu Area =================-->
 
-    <!--================ Start Home Banner Area =================-->
+    <!--================Home Banner Area =================-->
     
-      @include('frontend.HomeBanner')
+    <!--================End Home Banner Area =================-->
+     @include('frontend.partials.Book.HomeBanner')
+     <!--================ Start Books Area =================-->
 
-    <!--================ End Home Banner Area =================-->
-
-    <!--================ Start Feature Area =================-->
+     @include('frontend.partials.Book.BooksArea')
     
-      @include('frontend.Feature')
-
-    <!--================ End Feature Area =================-->
-
-    <!--================ Start Popular Courses Area =================-->
-      
-      @include('frontend.PopularCourse')
-
-
-    <!--================ End Popular Courses Area =================-->
+    <!--================ End Books Area =================-->
 
     <!--================ Start footer Area  =================-->
-    
-    @include('frontend.Footer')
-
+      
+      @include('frontend.partials.Homepage.Footer')
 
     <!--================ End footer Area  =================-->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-     <!--   Core   -->
+    <!--   Core   -->
     <script src="{{ asset('assets/js/jquery-3.4.1.js') }}"></script>
     <script src="{{ asset('assets/js/popper.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>

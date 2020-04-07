@@ -47,7 +47,7 @@
                   <a class="nav-link" href="index.html">Home</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Books</a>
+                  <a class="nav-link" href="{{ route('books') }}">Books</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Contact</a>
