@@ -46,7 +46,7 @@ class BookController extends Controller
 
        if ($user->borrow()->where('books.id', $book->id)->count() > 0) {
 
-        return redirect()->back()->with('borrowFailed' , 'Failed You Have Earned A Book Before !');
+        return redirect()->back()->with('borrowFailed' , 'Failed You Have Borrowed A Book Before !');
 
 
        }

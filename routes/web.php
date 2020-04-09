@@ -11,15 +11,19 @@
 |
 */
 
-Route::get('/', 'frontend\HomeController@bukuLimit')->name('root');
+Route::get('/', 'frontend\HomeController@bukuLimit')->name('root')->middleware('guest');
 
-Route::get('/book' , 'frontend\BookController@index')->name('books');
+Route::get('/books' , 'frontend\BookController@index')->name('books');
 
 Route::get('/book/{book}/detail', 'frontend\BookController@show')->name('book.details');
 
 Route::post('/book/{book}/borrow' , 'frontend\BookController@store')->name('book.borrow')->middleware('auth');
 
+Route::get('/contact' , 'frontend\HomeController@contact')->name('contact')->middleware('guest');
+
+Route::get('/about' , 'frontend\HomeController@about')->name('about')->middleware('guest');
+
 
 Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');
+Route::get('/home', 'frontend\HomeController@bukuLimit')->name('home')->middleware('verified');

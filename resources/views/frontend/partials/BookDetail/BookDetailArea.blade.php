@@ -29,7 +29,7 @@
                         <img class="img-fluid" src="{{ $book->cover }}" alt="" style="height: 341px; width: 730px; background-size: cover;">
                     </div>
                     <div class="content_wrapper">
-                        <h4 class="title">Description</h4>
+                        <h4 class="title">Description Of Book {{ $book->title }}</h4>
                         <div class="content">
                             {{ $book->description }}
                         </div>

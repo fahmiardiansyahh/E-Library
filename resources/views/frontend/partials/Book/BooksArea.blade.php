@@ -29,7 +29,10 @@
                 </p>
               </div>
               <div class="align-items-center justify-content-center d-flex">
-                <button type="button" class="genric-btn primary circle arrow">Detail</button>
+                   <form action="{{ route('book.details', $books) }}" method="GET" class="mb-4 d-inline-block">
+                      @csrf
+                        <button type="submit" class="genric-btn primary circle arrow">Detail</button>
+                    </form>
               </div>
             </div>
           </div>
