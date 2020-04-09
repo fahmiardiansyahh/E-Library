@@ -37,4 +37,12 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function borrow() {
+
+        return $this->belongsToMany('App\Book', 'borrow_history');
+
+    }
+
 }

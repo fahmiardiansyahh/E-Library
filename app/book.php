@@ -39,5 +39,12 @@ class Book extends Model
 
   	}
 
+    public function borrowed() {
+
+
+      return $this->belongsToMany('App\User' , 'borrow_hostory');
+
+    }
+
 
 }

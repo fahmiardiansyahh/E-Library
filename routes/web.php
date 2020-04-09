@@ -15,6 +15,10 @@ Route::get('/', 'frontend\HomeController@bukuLimit')->name('root');
 
 Route::get('/book' , 'frontend\BookController@index')->name('books');
 
+Route::get('/book/{book}/detail', 'frontend\BookController@show')->name('book.details');
+
+Route::post('/book/{book}/borrow' , 'frontend\BookController@store')->name('book.borrow')->middleware('auth');
+
 
 Auth::routes(['verify' => true]);
 

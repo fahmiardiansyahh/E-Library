@@ -23,9 +23,16 @@
                 </div>
                 <div class="course_content">
                   <span class="price">{{ $books->qty }}</span>
-                  <span class="tag mb-4 d-inline-block">Free</span>
+                    
+                    <form action="{{ route('book.details', $books) }}" method="GET" class="mb-4 d-inline-block">
+                      
+                      @csrf
+                      <button type="submit" class="genric-btn warning-border circle">Detail</button>
+
+                    </form>
+
                   <h4 class="mb-3">
-                    <a href="#">{{ Str::substr($books->title , 0 ,10) }}</a>
+                    {{ Str::substr($books->title , 0 ,10) }}
                   </h4>
                   <p>
                    {{ Str::substr($books->description , 0 ,30) }}

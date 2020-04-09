@@ -29,7 +29,7 @@
                 </p>
               </div>
               <div class="align-items-center justify-content-center d-flex">
-                <button type="button" class="genric-btn primary circle arrow">Borrow</button>
+                <button type="button" class="genric-btn primary circle arrow">Detail</button>
               </div>
             </div>
           </div>

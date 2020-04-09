@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Book;
+use App\BorrowHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class BookController extends Controller
         //
         $book = Book::paginate(8);
 
-        return view('frontend.partials.BookPageDefault', compact('book'));
+        return view('frontend.BookPageDefault', compact('book'));
 
     }
 
@@ -38,9 +39,24 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Book $book)
     {
         //
+       $user = auth()->user();
+
+       if ($user->borrow()->where('books.id', $book->id)->count() > 0) {
+
+        return redirect()->back()->with('borrowFailed' , 'Failed You Have Earned A Book Before !');
+
+
+       }
+
+       $user->borrow()->attach($book);
+
+       // Decrement qty
+       $book->decrement('qty');
+
+        return redirect()->back()->with('borrowSuccess' , 'Success You Haved Borrow A Book !');
     }
 
     /**
@@ -52,6 +68,7 @@ class BookController extends Controller
     public function show(Book $book)
     {
         //
+        return view('frontend.BookDetail', compact('book') );
     }
 
     /**
