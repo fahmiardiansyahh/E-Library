@@ -1,0 +1,46 @@
+<section class="trainer_area section_gap_top">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5">
+            <div class="main_title">
+              <h2 class="mb-3">Books</h2>
+              <p>
+                Listed Of You Have Been Borrowed!
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center d-flex align-items-center">
+
+      
+        @foreach($book as $books)
+          
+  
+          <div class="col-lg-3 col-md-6 col-sm-12 single-trainer">
+            <div class="thumb d-flex justify-content-sm-center">
+              <img class="img-fluid" src="{{ $books->getCover() }}" alt="books-image" />
+            </div>
+            <div class="meta-text text-sm-center">
+              <h4>{{ Str::substr($books->author->nama , 0 , 10) }}</h4>
+              <p class="designation">Jumlah {{ $books->qty }}</p>
+              <div class="mb-4">
+                <p>
+                  {{ Str::substr($books->description , 0 , 35) }}
+                </p>
+              </div>
+              <div class="align-items-center justify-content-center d-flex">
+                   <form action="{{ route('book.details', $books) }}" method="GET" class="mb-4 d-inline-block">
+                      @csrf
+                        <button type="submit" class="genric-btn danger circle arrow disabled">You Haved Borrowed</button>
+                    </form>
+              </div>
+            </div>
+          </div>
+
+        @endforeach
+          
+          {{ $book->links() }}
+
+        </div>
+      </div>
+</section>

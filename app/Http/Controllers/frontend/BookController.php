@@ -104,4 +104,13 @@ class BookController extends Controller
     {
         //
     }
+
+    // Borrowed
+    public function borrowed() {
+
+      $book = auth()->user()->borrow()->paginate(8);
+
+      return view('frontend.BorrowedBookDefault' , compact('book'));
+
+    }
 }

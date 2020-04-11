@@ -17,6 +17,8 @@ Route::get('/books' , 'frontend\BookController@index')->name('books');
 
 Route::get('/book/{book}/detail', 'frontend\BookController@show')->name('book.details');
 
+Route::get('/book/borrowed' , 'frontend\BookController@borrowed')->name('book.borrowed')->middleware('auth');
+
 Route::post('/book/{book}/borrow' , 'frontend\BookController@store')->name('book.borrow')->middleware('auth');
 
 Route::get('/contact' , 'frontend\HomeController@contact')->name('contact')->middleware('guest');

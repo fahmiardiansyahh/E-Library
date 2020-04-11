@@ -81,14 +81,25 @@
                             </a>
                         </li>
                     </ul>
-                    <form action="{{ route('book.borrow' , $book->id) }}" method="POST">
+                    
+
+
+                    @if(auth()->user()->borrow()->where('books.id', $book->id)->count() > 0)
+                   
+                    <button class="genric-btn danger radius disable text-uppercase enroll rounded-0 text-danger">You Haved Borrowed</button>
+
+
+                    @else
+
+                     <form action="{{ route('book.borrow' , $book->id) }}" method="POST">
                     
                     @csrf
 
-                    <button class="primary-btn text-uppercase enroll rounded-0 text-white">Borrow</button>
+                    <button type="submit" class="primary-btn text-uppercase enroll rounded-0 text-white">Borrow</button>
 
                     </form>
-
+                    
+                    @endif
                 </div>
             </div>
         </div>

@@ -172,8 +172,18 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ route('books') }}">Books</a>
+                <li class="nav-item submenu dropdown">
+                  <a class="nav-link dropdown-toggle"  role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false" href="#">Books</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('books') }}">Books</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('book.borrowed') }}">Borrowed Book</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item submenu dropdown">
                   <a
@@ -203,8 +213,18 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="{{ route('books') }}">Books</a>
+                <li class="nav-item submenu dropdown active">
+                  <a class="nav-link dropdown-toggle"  role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false" href="#">Books</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('books') }}">Books</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('book.borrowed') }}">Borrowed Book</a>
+                        </li>
+                    </ul>
                 </li>
 
                  <li class="nav-item submenu dropdown">
@@ -236,8 +256,18 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ route('home') }}">Home</a>
                 </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="#">Books</a>
+                 <li class="nav-item submenu dropdown active">
+                  <a class="nav-link dropdown-toggle"  role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false" href="#">Books</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('books') }}">Books</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('book.borrowed') }}">Borrowed Book</a>
+                        </li>
+                    </ul>
                 </li>
                  <li class="nav-item submenu dropdown">
                   <a
@@ -262,7 +292,45 @@
                   </ul>
                 </li>
                
-
+              @elseif($url == "borrowed")
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ route('home') }}">Home</a>
+                </li>
+                 <li class="nav-item submenu dropdown active">
+                  <a class="nav-link dropdown-toggle"  role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false" href="#">Books</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('books') }}">Books</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{{ route('book.borrowed') }}">Borrowed Book</a>
+                        </li>
+                    </ul>
+                </li>
+                 <li class="nav-item submenu dropdown">
+                  <a
+                    href="#"
+                    class="nav-link dropdown-toggle"
+                    data-toggle="dropdown"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    ><i class="ti-user mr-2"></i>{{ auth()->user()->name }}</a
+                  >
+                  <ul class="dropdown-menu">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ route('logout') }}"
+                      onclick="event.preventDefault();
+                      document.getElementById('logout-form').submit();"
+                        >Logout</a>
+                    </li>
+                  </ul>
+                </li>
               @endif
 
 
